@@ -2,16 +2,13 @@
 
 module.exports = debounce
 
-function debounce ({wait = 0, initialWait, maxWait}, fn) {
+function debounce (opts, fn) {
   const acc = []
   let timeout
-  let timeoutMaxWait
   let running
   let initialWaiting
 
   function invokeNow () {
-    if (timeoutMaxWait) console.log('==timeoutMaxWait')
-    timeoutMaxWait && clearTimeout(timeoutMaxWait)
     invokeNext(true)
   }
 
@@ -21,7 +18,6 @@ function debounce ({wait = 0, initialWait, maxWait}, fn) {
     timeout = null
     if (acc.length) {
       running = true
-      maxWait && (timeoutMaxWait = setTimeout(invokeNow, maxWait))
       fn(acc.concat(), invokeNow)
       acc.length = 0
     }
@@ -31,7 +27,7 @@ function debounce ({wait = 0, initialWait, maxWait}, fn) {
     running = false
     clearTimeout(timeout)
     if (acc.length === 1) initialWaiting = true
-    const currentWait = acc.length > 1 ? wait : initialWait
+    const currentWait = opts.initialWait && acc.length <=1 ? opts.initialWait : opts.wait
     console.log(' currentWait', currentWait, running)
     now
       ? invokeFn()
