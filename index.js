@@ -17,6 +17,7 @@ function debounce ({wait = 0, initialWait, maxWait}, fn) {
 
   function invokeFn () {
     if (running) return
+    initialWaiting = false
     timeout = null
     if (acc.length) {
       running = true
@@ -39,7 +40,7 @@ function debounce ({wait = 0, initialWait, maxWait}, fn) {
 
   return function (val) {
     acc.push(val)
-    console.log(' val',running, val)
-    !running && invokeNext()
+    console.log('..',running, val)
+    !running && !initialWaiting && invokeNext()
   }
 }
